@@ -26,9 +26,11 @@ const (
 )
 
 var (
-	currentUsers       int = 0
-	processedCounter   int = 0
-	currentRequestRate int = 0
+	currentUsers       int   = 0
+	processedCounter   int   = 0
+	currentRequestRate int   = 0
+	firstTimeMs        int64 = timeMs(time.Now())
+	lastTimeMs         int64 = 0
 )
 
 func main() {
@@ -52,6 +54,10 @@ func main() {
 		currentUsers++
 		go connHandler(conn)
 	}
+}
+
+func timeMs(t time.Time) int64 {
+	return t.UnixNano() / time.Millisecond.Nanoseconds()
 }
 
 func connHandler(conn net.Conn) {
@@ -84,9 +90,14 @@ func connHandler(conn net.Conn) {
 	currentRequestRate++
 
 	// rate limit
-	limiter := time.Tick(1000 * time.Millisecond)
-	if currentRequestRate == rateLimit {
-		<-limiter
+	lastTimeMs = timeMs(time.Now())
+	duration := lastTimeMs - firstTimeMs
+
+	if currentRequestRate == rateLimit && duration <= 1000 {
+		firstTimeMs = timeMs(time.Now())
+		log.Println("Hit rate limit")
+		conn.Write([]byte("Hit rate limit"))
+		return
 	}
 
 	connHandler(conn)
