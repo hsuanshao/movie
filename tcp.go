@@ -7,7 +7,7 @@ import (
 	"net"
 	"time"
 
-	mv "github.com/hsuanshao/movie/mv"
+	movie "github.com/hsuanshao/movie/mv"
 )
 
 const rateLimit int = 30
@@ -50,7 +50,8 @@ func connHandler(conn net.Conn) {
 
 	// Get movie information by user input
 	// Dataset is omdb opendata
-	result, err := mv.AskMovie(moviename)
+
+	result, err := movie.AskMovie(moviename)
 	if err != nil {
 		log.Printf("set api query failure")
 	}
