@@ -6,6 +6,20 @@ import (
 	"time"
 )
 
+const usage = `impl [-dir directory] <recv> <iface>
+
+impl generates method stubs for recv to implement iface.
+
+Examples:
+
+impl 'f *File' io.Reader
+impl Murmur hash.Hash
+impl -dir $GOPATH/src/github.com/josharian/impl Murmur hash.Hash
+
+Don't forget the single quotes around the receiver type
+to prevent shell globbing.
+`
+
 var (
 	currentUsers       int   = 0
 	processedCounter   int   = 0
