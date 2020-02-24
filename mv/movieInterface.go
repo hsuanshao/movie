@@ -1,4 +1,4 @@
-package mvinterface
+package movie
 
 // Movie is movie query module's interface
 type Movie interface {

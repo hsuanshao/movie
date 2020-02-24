@@ -9,8 +9,11 @@ import (
 
 const authorization string = "cb132a69"
 
+type movieStore struct {
+}
+
 // AskMovie request user provide movie name to get movie information by applied omdb api
-func AskMovie(moviename string) ([]byte, error) {
+func (m *movieStore) AskMovie(moviename string) ([]byte, error) {
 	req, err := http.NewRequest("GET", "http://www.omdbapi.com/", nil)
 	if err != nil {
 		log.Printf("request " + moviename + " info failure")
